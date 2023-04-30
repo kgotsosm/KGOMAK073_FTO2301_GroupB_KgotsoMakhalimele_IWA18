@@ -21,8 +21,8 @@ export const TABLES = [
 
 /**
  * The different states that an order can be in. This can not be configured
- * before-hand just yet since the app doesn't yet create the HTML dynamically.
- * However there is room to build this functionality out at the future point.
+ * beforehand just yet since the app doesn't yet create the HTML dynamically.
+ * However, there is room to build this functionality out at the future point.
  */
 export const COLUMNS = [
     'ordered',
@@ -51,14 +51,14 @@ export const state = {
  * combining a random number, a timestamp and another random number. While in
  * theory it is unlikely for two orders to have the exact same timestamp up to
  * the millisecond, it is still possible with edge cases like different
- * timezones. Therefore two additional random numbers are added to the ID to
+ * timezones. Therefore, two additional random numbers are added to the ID to
  * ensure additional uniqueness.
  */
 const createUniqueId = () => {
-    const random1 = Math.floor(Math.random() * 10000000000000000)
-    const random2 = Math.floor(Math.random() * 10000000000000000)
-    const timestamp = new Date().getTime()
-    return `${random1}-${timestamp}-${random2}`
+    const firstRandom = Math.floor(Math.random() * 100000)
+    const secondRandom = Math.floor(Math.random() * 100000)
+    const orderTime = new Date().getTime()
+    return `${firstRandom}-${orderTime}-${secondRandom}`
 }
 
 /**

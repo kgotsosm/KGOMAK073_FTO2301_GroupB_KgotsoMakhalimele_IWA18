@@ -1,10 +1,10 @@
-import { TABLES, COLUMNS, state, createOrderData } from './data.js'
+import {COLUMNS, state, TABLES} from './data.js'
 
 /**
  * Takes any order as an object literal (as saved in state) and converts it a
  * HTML element that can be appended to the DOM. Creating order elements
  * individually prevents the JavaScript having to re-render the entire DOM every
- * time an new order is created.
+ * time a new order is created.
  *
  * @param {object} order
  * @returns {HTMLElement}
@@ -12,7 +12,8 @@ import { TABLES, COLUMNS, state, createOrderData } from './data.js'
 export const createOrderHtml = (order) => {
     const { id, title, table, created } = order
 
-    const element = document.createElement('div') // <div class="order" draggable="true" data-id="id"></div>
+    // Create the HTML for the order
+    const element = document.createElement('div')
     element.className = 'order'
     element.draggable = true
     element.dataset.id = id
@@ -49,16 +50,17 @@ export const createOrderHtml = (order) => {
  * @returns {HTMLElement}
  */
 const createTableOptionsHtml = () => {
-    const fragment = document.createDocumentFragment()
 
-    for (const singleTable of TABLES) { //loop through tables ID
+    const docFragment = document.createDocumentFragment()
+
+    for (const singleTable of TABLES) {
         const option = document.createElement('option')
-        option.value = singleTable //1,2,3,4,5,6,7...
+        option.value = singleTable
         option.innerText = singleTable
-        fragment.appendChild(option)
+        docFragment.appendChild(option)
     }
 
-    return fragment
+    return docFragment
 }
 
 /**
@@ -71,8 +73,8 @@ const createTableOptionsHtml = () => {
  * dynamically by a loop that runs over the COLUMNS array.
  */
 export const html = {
-    columns: {}, //ordered, preparing, served
-    area: {},//ordered, preparing, served
+    columns: {},
+    area: {},
     add: {
         overlay: document.querySelector('[data-add-overlay]'),
         form: document.querySelector('[data-add-form]'),
@@ -121,8 +123,7 @@ export const updateDraggingHtml = (newDragging) => {
     const { over = state.dragging.over } = newDragging
 
     for (const columnName of COLUMNS) {
-        const value = columnName === over ? 'rgba(0, 160, 70, 0.2)' : ''
-        html.area[columnName].style.backgroundColor = value
+        html.area[columnName].style.backgroundColor = columnName === over ? 'rgba(0, 160, 70, 0.2)' : ''
     }
 }
 
@@ -147,10 +148,10 @@ export const moveToColumn = (id, newColumn) => {
 
 /**
  * Starts the app focused on the "add order" button. This means that users can
- * immediately started adding an order by pressing the enter or spacebar.
+ * immediately start adding an order by pressing enter or the spacebar.
  */
-html.other.add.focus()
 
+html.other.add.focus()
 
 html.add.table.appendChild(createTableOptionsHtml())
 html.edit.table.appendChild(createTableOptionsHtml())
