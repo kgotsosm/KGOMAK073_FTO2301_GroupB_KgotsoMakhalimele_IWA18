@@ -13,10 +13,7 @@ import { createOrderData, state } from './data.js';
  * @param {Event} event
  */
 const handleDragOver = (event) => {
-
-    if (!column) return
-    updateDraggingHtml({ over: column })
-
+    event.path = undefined;
     event.preventDefault();
     const path = event.path || event.composedPath()
     let column = null
@@ -29,6 +26,9 @@ const handleDragOver = (event) => {
         }
     }
 
+    if (!column) return
+    updateDraggingHtml({ over: column })
+    updateDraggingHtml({ over: column })
 }
 
 
@@ -56,7 +56,7 @@ const handleHelpToggle = (event) => {
     }
 
 }
-const handleAddToggle = (event) => {
+const handleAddToggle = (event) => { // clicking add order button
     const { target } = event
 
     let addOverlay = html.add.overlay
@@ -71,7 +71,8 @@ const handleAddToggle = (event) => {
 
 }
 
-const handleAddSubmit = (event) => {
+
+const handleAddSubmit = (event) => { // clicking add button to add order
     event.preventDefault()
     const { target } = event
     let addOverlay = html.add.overlay
@@ -83,11 +84,11 @@ const handleAddSubmit = (event) => {
         column: html.columns.ordered
 
     }
-
+    
     const OrderObject = createOrderData(data)
     const fullOrder = createOrderHtml(OrderObject)
     const orderedColumn = document.querySelector('[data-column="ordered"]')
-
+    
     state.orders[OrderObject.id] = OrderObject
     console.log(state)
     console.log(fullOrder)
@@ -95,7 +96,7 @@ const handleAddSubmit = (event) => {
 
     if (target === html.add.form)
         orderedColumn.append(fullOrder)
-
+    
     html.add.form.reset()
 
 
@@ -107,11 +108,11 @@ const handleEditToggle = (event) => {
     const editOverlay = html.edit.overlay
     editOverlay.style.display = 'block'
 
-    if (target === html.edit.cancel) {
+    if (target === html.edit.cancel) { 
         editOverlay.style.display = 'none'
     }
     let orderID = target.dataset.id
-// console.log(orderID)
+
 
 
     html.edit.title.value = state.orders[orderID].title
@@ -120,16 +121,15 @@ const handleEditToggle = (event) => {
 }
 
 
-const handleEditSubmit = (event) => { // submit the edited form
+const handleEditSubmit = (event) => { 
     event.preventDefault()
     const {target} = event
 
     let order = document.querySelector(".order")
     let orderDivId =order.dataset.id // get the data-id
 
-    const newCol = document.querySelector("[data-edit-column]").value
-
-
+    const newCol = document.querySelector("[data-edit-column]").value 
+    
     const updatedData = {
         id: orderDivId,
         title: html.edit.title.value,
@@ -139,18 +139,17 @@ const handleEditSubmit = (event) => { // submit the edited form
 
 
     let newColumn= html.columns[newCol]
-    state.orders[orderDivId].title = updatedData.title
-    state.orders[orderDivId].table = updatedData.table
-    state.orders[orderDivId].column = newColumn
-    console.log(state.orders[orderDivId].column)
+    state.orders[orderDivId].title = updatedData.title 
+    state.orders[orderDivId].table = updatedData.table 
+    state.orders[orderDivId].column = newColumn 
 
     const newHtmlOrder = createOrderHtml(updatedData)
 
-    let deleteDiv = document.querySelector(`[data-id="${orderDivId}"]`)
+    let removeDiv = document.querySelector(`[data-id="${orderDivId}"]`) 
 
 
-    if (target === html.edit.form){
-        deleteDiv.remove()
+    if (target === html.edit.form){ 
+        removeDiv.remove()
         newColumn.append(newHtmlOrder)
     }
 
@@ -161,14 +160,14 @@ const handleEditSubmit = (event) => { // submit the edited form
 }
 
 
-const handleDelete = (event) => { //delete order
+const handleDelete = (event) => {
     const { target } = event
 
     let order = document.querySelector(".order")
-    let orderDivId = order.dataset.id
-    let removediv = document.querySelector(`[data-id="${order.dataset.id}"]`)
-
-    removediv.remove()
+    let orderDivId =order.dataset.id// target.dataset.id
+    let removeDiv = document.querySelector(`[data-id="${order.dataset.id}"]`)
+    
+    removeDiv.remove()
     console.log(state)
 
     html.edit.overlay.style.display = "none"
@@ -182,8 +181,8 @@ html.add.form.addEventListener('submit', handleAddSubmit)
 
 html.other.grid.addEventListener('click', handleEditToggle)
 html.edit.cancel.addEventListener('click', handleEditToggle)
-html.edit.form.addEventListener('submit', handleEditSubmit)
-html.edit.delete.addEventListener('click', handleDelete)
+html.edit.form.addEventListener('submit', handleEditSubmit) 
+html.edit.delete.addEventListener('click', handleDelete) 
 
 html.help.cancel.addEventListener('click', handleHelpToggle)
 html.other.help.addEventListener('click', handleHelpToggle)
